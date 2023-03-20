@@ -51,3 +51,9 @@
     ![실행화면4](https://raw.githubusercontent.com/PKNU-IOT3/bustop_pyqt_practice/main/images/%EC%8B%A4%ED%96%89%ED%99%94%EB%A9%B4_0317_4.png)
     ### - DB에서 버스 탑승인원 변경 시 앱에서 실시간 반영
     ![실행화면5](https://raw.githubusercontent.com/PKNU-IOT3/bustop_pyqt_practice/main/images/%EC%8B%A4%ED%96%89%ED%99%94%EB%A9%B4_0317_5.png)
+
+## 23.03.20 프로젝트 수정
+- 라즈베리파이 터치스크린과 연동
+    - 터치 스크린 세로모드에 맞춰 리사이징시 label size 변경
+    - 라즈베리파이 스크린 터치 시 기능 정상작동 및 DB와 실시간 연동 확인
+    
