@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>719</width>
-    <height>522</height>
+    <width>802</width>
+    <height>484</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -188,7 +188,7 @@
                </property>
                <property name="icon">
                 <iconset resource="resources.qrc">
-                 <normaloff>:/icons/icons/home.svg</normaloff>:/icons/icons/home.svg</iconset>
+                 <normaloff>:/icons/icons/zoom-out.svg</normaloff>:/icons/icons/zoom-out.svg</iconset>
                </property>
                <property name="iconSize">
                 <size>
@@ -720,7 +720,14 @@
         </widget>
        </item>
        <item>
-        <widget class="QWidget" name="mainBodyContent" native="true"/>
+        <widget class="QWidget" name="mainBodyContent" native="true">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>

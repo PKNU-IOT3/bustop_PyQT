@@ -1,4 +1,7 @@
 <RCC>
+  <qresource prefix="images">
+    <file>bustopimage.png</file>
+  </qresource>
   <qresource prefix="icons">
     <file>icons/activity.svg</file>
     <file>icons/airplay.svg</file>
@@ -287,8 +290,5 @@
     <file>icons/zap-off.svg</file>
     <file>icons/zoom-in.svg</file>
     <file>icons/zoom-out.svg</file>
-  </qresource>
-  <qresource prefix="images">
-    <file>bustopimage.png</file>
   </qresource>
 </RCC>
