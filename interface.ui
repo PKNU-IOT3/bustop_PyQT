@@ -123,7 +123,7 @@
               <number>0</number>
              </property>
              <item>
-              <widget class="QPushButton" name="menuBtn">
+              <widget class="QPushButton" name="BtnMenu">
                <property name="toolTip">
                 <string>Menu</string>
                </property>
@@ -176,7 +176,7 @@
               <number>0</number>
              </property>
              <item>
-              <widget class="QPushButton" name="HomeBtn">
+              <widget class="QPushButton" name="BtnHome">
                <property name="toolTip">
                 <string>Home</string>
                </property>
@@ -226,7 +226,7 @@
               <number>0</number>
              </property>
              <item>
-              <widget class="QPushButton" name="pushButton_5">
+              <widget class="QPushButton" name="BtnSearch">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                  <horstretch>0</horstretch>
@@ -276,7 +276,7 @@
               <number>0</number>
              </property>
              <item>
-              <widget class="QPushButton" name="pushButton_6">
+              <widget class="QPushButton" name="BtnHide">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                  <horstretch>0</horstretch>
@@ -339,7 +339,7 @@
               <number>0</number>
              </property>
              <item>
-              <widget class="QPushButton" name="infoBtn">
+              <widget class="QPushButton" name="BtnInfo">
                <property name="toolTip">
                 <string>Information</string>
                </property>
@@ -386,7 +386,7 @@
               <number>10</number>
              </property>
              <item>
-              <widget class="QPushButton" name="helpBtn">
+              <widget class="QPushButton" name="BtnHelp">
                <property name="toolTip">
                 <string>Help</string>
                </property>
@@ -711,7 +711,7 @@
               <number>0</number>
              </property>
              <item>
-              <widget class="QPushButton" name="pushButton_2">
+              <widget class="QPushButton" name="BtnMinimize">
                <property name="toolTip">
                 <string>Minimize Window</string>
                </property>
@@ -731,7 +731,7 @@
               </widget>
              </item>
              <item>
-              <widget class="QPushButton" name="pushButton_3">
+              <widget class="QPushButton" name="BtnMaximize">
                <property name="toolTip">
                 <string>Restore Window</string>
                </property>
@@ -868,7 +868,7 @@
                   </property>
                   <layout class="QVBoxLayout" name="verticalLayout_13">
                    <item>
-                    <widget class="QPushButton" name="pushButton_4">
+                    <widget class="QPushButton" name="BtnAddCnt">
                      <property name="font">
                       <font>
                        <family>나눔고딕</family>
@@ -891,7 +891,7 @@
                     </widget>
                    </item>
                    <item>
-                    <widget class="QPushButton" name="pushButton">
+                    <widget class="QPushButton" name="BtnMinusCnt">
                      <property name="font">
                       <font>
                        <family>나눔고딕</family>
@@ -964,7 +964,7 @@
                </property>
                <layout class="QHBoxLayout" name="horizontalLayout_10">
                 <item>
-                 <widget class="QLabel" name="label_13">
+                 <widget class="QLabel" name="LblNotification">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
                     <horstretch>0</horstretch>
@@ -987,7 +987,7 @@
                  </widget>
                 </item>
                 <item alignment="Qt::AlignRight">
-                 <widget class="QPushButton" name="pushButton_8">
+                 <widget class="QPushButton" name="BtnClearNote">
                   <property name="toolTip">
                    <string>Close notification</string>
                   </property>
