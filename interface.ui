@@ -176,7 +176,7 @@
               <number>0</number>
              </property>
              <item>
-              <widget class="QPushButton" name="BtnHome">
+              <widget class="QPushButton" name="BtnDeviceOnOff">
                <property name="toolTip">
                 <string>Home</string>
                </property>
@@ -184,11 +184,11 @@
                 <string notr="true">background-color: #1f232a;</string>
                </property>
                <property name="text">
-                <string>  메인 화면으로 가기</string>
+                <string>  Device ON/OFF</string>
                </property>
                <property name="icon">
                 <iconset resource="resources.qrc">
-                 <normaloff>:/icons/icons/home.svg</normaloff>:/icons/icons/home.svg</iconset>
+                 <normaloff>:/icons/icons/battery-charging.svg</normaloff>:/icons/icons/battery-charging.svg</iconset>
                </property>
                <property name="iconSize">
                 <size>
@@ -344,7 +344,7 @@
                 <string>Information</string>
                </property>
                <property name="text">
-                <string>  뭐하는 기계일꼬</string>
+                <string>   BuSTOP이란?</string>
                </property>
                <property name="icon">
                 <iconset resource="resources.qrc">
@@ -391,7 +391,7 @@
                 <string>Help</string>
                </property>
                <property name="text">
-                <string>  도움말(관리자와 연결)</string>
+                <string>   도움말(관리자와 연결)</string>
                </property>
                <property name="icon">
                 <iconset resource="resources.qrc">
@@ -472,7 +472,7 @@
             </property>
             <layout class="QHBoxLayout" name="horizontalLayout_3">
              <item>
-              <widget class="QLabel" name="label">
+              <widget class="QLabel" name="LblLeftPanel">
                <property name="font">
                 <font>
                  <family>나눔고딕</family>
@@ -508,56 +508,14 @@
             <widget class="QWidget" name="page_5">
              <layout class="QVBoxLayout" name="verticalLayout_7">
               <item>
-               <widget class="QLabel" name="label_2">
+               <widget class="QLabel" name="LblInfor">
                 <property name="font">
                  <font>
                   <pointsize>12</pointsize>
                  </font>
                 </property>
                 <property name="text">
-                 <string>Default Page</string>
-                </property>
-                <property name="alignment">
-                 <set>Qt::AlignCenter</set>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </widget>
-            <widget class="QWidget" name="page_6">
-             <layout class="QVBoxLayout" name="verticalLayout_8">
-              <item>
-               <widget class="QLabel" name="label_3">
-                <property name="font">
-                 <font>
-                  <pointsize>13</pointsize>
-                  <weight>75</weight>
-                  <bold>true</bold>
-                 </font>
-                </property>
-                <property name="text">
-                 <string>Information</string>
-                </property>
-                <property name="alignment">
-                 <set>Qt::AlignCenter</set>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </widget>
-            <widget class="QWidget" name="page_7">
-             <layout class="QVBoxLayout" name="verticalLayout_9">
-              <item>
-               <widget class="QLabel" name="label_4">
-                <property name="font">
-                 <font>
-                  <pointsize>13</pointsize>
-                  <weight>75</weight>
-                  <bold>true</bold>
-                 </font>
-                </property>
-                <property name="text">
-                 <string>Help</string>
+                 <string/>
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignCenter</set>
@@ -642,7 +600,7 @@
               </widget>
              </item>
              <item>
-              <widget class="QLabel" name="label_6">
+              <widget class="QLabel" name="LblTopPanel">
                <property name="font">
                 <font>
                  <family>나눔고딕</family>
@@ -981,7 +939,7 @@
                   </property>
                   <layout class="QHBoxLayout" name="horizontalLayout_9">
                    <item>
-                    <widget class="QLabel" name="label_7">
+                    <widget class="QLabel" name="LblRightPanel">
                      <property name="font">
                       <font>
                        <family>나눔고딕</family>
@@ -1084,7 +1042,7 @@
            <widget class="QWidget" name="popupNotificationSubContainer" native="true">
             <layout class="QVBoxLayout" name="verticalLayout_20">
              <item>
-              <widget class="QLabel" name="label_14">
+              <widget class="QLabel" name="LblBottomPanel">
                <property name="font">
                 <font>
                  <pointsize>10</pointsize>
@@ -1122,7 +1080,7 @@
                    </font>
                   </property>
                   <property name="text">
-                   <string> 각종 경고문 / 탑승 대기 / 버튼 시 확인 메시지 출력</string>
+                   <string/>
                   </property>
                   <property name="alignment">
                    <set>Qt::AlignCenter</set>
@@ -1171,7 +1129,7 @@
             </property>
             <layout class="QHBoxLayout" name="horizontalLayout_12">
              <item>
-              <widget class="QLabel" name="label_15">
+              <widget class="QLabel" name="LblStatusBar">
                <property name="text">
                 <string>Copyright IOT_Team3</string>
                </property>
