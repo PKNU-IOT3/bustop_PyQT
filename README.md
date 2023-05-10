@@ -57,4 +57,8 @@
     ### - 터치 스크린 세로모드에 맞춰 리사이징시 label size 변경
     ### - 라즈베리파이 스크린 터치 시 기능 정상작동 및 DB와 실시간 연동 확인
     <img src="https://raw.githubusercontent.com/PKNU-IOT3/bustop_pyqt_practice/main/images/%EB%9D%BC%EC%A6%88%EB%B2%A0%EB%A6%AC%ED%8C%8C%EC%9D%B4%EC%97%B0%EB%8F%99_0320.jpg" width="400" height="800" />
-    
+
+# PyQt를 활용한 버스 탑승 App - UI 및 로직 대규모 수정
+### 23.05.11 수정
+## Qt Designer을 활용한 UI 변경
+- <img src="https://raw.githubusercontent.com/PKNU-IOT3/bustop_pyqt_practice/main/images/interfaceUI_Design.png"/>
