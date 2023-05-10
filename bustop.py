@@ -19,6 +19,7 @@ class qtApp(QMainWindow):
         self.setWindowIcon(QIcon('bustopimage.png'))
         self.setWindowTitle('BuSTOP v2')
         self.UI초기화()
+        self.InitSignal()
         self.BtnHideClicked()
     
     def UI초기화(self):
@@ -53,7 +54,8 @@ class qtApp(QMainWindow):
                 self.BusInfor.setItem(row,column,cell)
                 cell.setTextAlignment(QtCore.Qt.AlignCenter)
                 cell.setFont(QFont('Rockwell',14))
-
+    
+    def InitSignal(self):
         # 버튼 시그널
         self.BtnAddCnt.clicked.connect(self.BtnAddCntClicked)
         self.BtnMinusCnt.clicked.connect(self.BtnMinusCntClicked)
@@ -64,9 +66,19 @@ class qtApp(QMainWindow):
         self.BtnHelp.clicked.connect(self.BtnHelpClicked)
         self.BtnClearNote.clicked.connect(self.BtnClearNoteClicked)
         self.BtnDeviceOnOff.clicked.connect(self.BtnDeviceOnOffClicked)
+    
+    # 셀 클릭 위치 확인 
+    def CellPosition(self):
+        qtApp.isClicked=True
+        row=self.BusInfor.currentRow()
+        mybus_num=self.BusInfor.item(row,1).text()
+        self.LblNotification.setText(f'{mybus_num} 버스 선택')
+        self.LblNotification.setFont(QFont('Rockwell',14))
+        self.LblNotification.setStyleSheet("color: green;")
 
     # 탑승 대기 버튼 클릭
     def BtnAddCntClicked(self):
+        #if self.BusInfor.currentRow()<0:
         if(qtApp.isClicked==False):
             self.LblNotification.setText("버튼 사용은 버스 선택 이후 가능합니다!")
             font=QFont('Rockwell',14)
@@ -85,7 +97,7 @@ class qtApp(QMainWindow):
                 )
             try:
                 cursor=self.mydb.cursor()
-                cursor.execute(f"UPDATE bus_table SET bus_cnt = bus_cnt+1 WHERE bus_num = '{mybus_num}'")
+                cursor.execute(f"UPDATE bus_table SET bus_cnt = bus_cnt+1 WHERE bus_num = '{mybus_num.replace('번', '')}'")
                 self.mydb.commit()
                 self.updateTable(row)
                 self.LblNotification.setText(f"{mybus_num} 버스 탑승 대기 완료!")
@@ -94,6 +106,7 @@ class qtApp(QMainWindow):
                 self.LblNotification.setFont(font)
                 self.LblNotification.setStyleSheet("color: green;")
                 qtApp.isClicked=False
+                return
             except mysql.connector.Error as error:
                 print("MySQL 서버 접속 에러 : {}".format(error))
             finally:
@@ -101,7 +114,8 @@ class qtApp(QMainWindow):
 
     # 탑승 취소 버튼 클릭
     def BtnMinusCntClicked(self):
-        if(qtApp.isClicked==False):
+        #if self.BusInfor.currentRow()<0:
+        if qtApp.isClicked==False:            
             self.LblNotification.setText("버튼 사용은 버스 선택 이후 가능합니다!")
             font=QFont('Rockwell',14)
             font.setBold(True)
@@ -112,7 +126,7 @@ class qtApp(QMainWindow):
             row=self.BusInfor.currentRow()
             mybus_num=self.BusInfor.item(row,1).text()
             mybus_cnt=self.BusInfor.item(row,2)
-            if(mybus_cnt.text()=='0'):
+            if mybus_cnt.text()=='0명':
                 self.LblNotification.setText("탑승 대기 인원이 0명이기에 취소 불가능합니다.")
                 font=QFont('Rockwell',14)
                 font.setBold(True)
@@ -124,35 +138,25 @@ class qtApp(QMainWindow):
                 host="localhost",
                 user="root",
                 password="12345",
-                database="bus"
-            )
-            # 탑승 취소 버튼 클릭 시 cnt-1
-            try:
-                cursor=self.mydb.cursor()
-                cursor.execute(f"UPDATE bus_table SET bus_cnt = bus_cnt-1 WHERE bus_num = '{mybus_num}'")
-                self.mydb.commit()
-                self.updateTable(row)
-                self.LblNotification.setText(f"{mybus_num} 버스 탑승 대기 완료!")
-                font=QFont('Rockwell',14)
-                font.setBold(True)
-                self.LblNotification.setFont(font)
-                self.LblNotification.setStyleSheet("color: green;")
-                qtApp.isClicked=False
-            except mysql.connector.Error as error:
-                print("MySQL 서버 접속 에러 : {}".format(error))
-            finally:
-                self.mydb.close()
+                database="bus")
+                # 탑승 취소 버튼 클릭 시 cnt-1
+                try:
+                    cursor=self.mydb.cursor()
+                    cursor.execute(f"UPDATE bus_table SET bus_cnt = bus_cnt-1 WHERE bus_num = '{mybus_num.replace('번', '')}'")
+                    self.mydb.commit()
+                    self.updateTable(row)
+                    self.LblNotification.setText(f"{mybus_num} 버스 탑승 취소 완료!")
+                    font=QFont('Rockwell',14)
+                    font.setBold(True)
+                    self.LblNotification.setFont(font)
+                    self.LblNotification.setStyleSheet("color: green;")
+                    qtApp.isClicked=False
+                    return
+                except mysql.connector.Error as error:
+                    print("MySQL 서버 접속 에러 : {}".format(error))
+                finally:
+                    self.mydb.close()
 
-    # 셀 클릭 유무 / 위치 확인 
-    def CellPosition(self):
-        qtApp.isClicked=True
-        row=self.BusInfor.currentRow()
-        mybus_num=self.BusInfor.item(row,1).text()
-        self.LblNotification.setText(f'{mybus_num} 버스 선택')
-        self.LblNotification.setFont(QFont('Rockwell',14))
-        self.LblNotification.setStyleSheet("color: green;")
-
-    
     #변경된 DB 내용을 QTableWidget인 BusInfor에 뿌려줌
     def updateTable(self,row):
         mydb=mysql.connector.connect(
@@ -235,38 +239,7 @@ class qtApp(QMainWindow):
             header_style="QHeaderView::section {background-color: %s; text-align: center;}" %QColor(255,255,255).name()
             self.BusInfor.horizontalHeader().setStyleSheet(header_style)
             qtApp.saveBattery = True
-        # #qtApp.saveBattery=True
-        # # 장치 on 상태일때
-        # if(qtApp.saveBattery==False):
-        #     self.LblLeftPanel.setStyleSheet("color: white;")
-        #     self.LblRightPanel.setStyleSheet("color: white;")
-        #     self.LblBottomPanel.setStyleSheet("color: white;")
-        #     self.LblStatusBar.setStyleSheet("color: white;")
-        #     self.LblTopPanel.setStyleSheet("color: white;")
-        #     self.BtnSearch.setStyleSheet("color: white;")
-        #     self.BtnHide.setStyleSheet("color: white;")
-        #     self.BtnInfo.setStyleSheet("color: white;")
-        #     self.BtnHelp.setStyleSheet("color: white;")
-        #     self.BtnAddCnt.setStyleSheet("color: white;")
-        #     self.BtnMinusCnt.setStyleSheet("color: white;")
-        #     qtApp.saveBattery=True
-        # # 장치 off 상태일때
-        # if(qtApp.saveBattery==True):
-        #     self.BusInfor.setRowCount(0)
-        #     self.LblNotification.setText("")
-        #     self.LblInfor.setText("")
-        #     self.LblLeftPanel.setStyleSheet("color: #16191d;")
-        #     self.LblRightPanel.setStyleSheet("color: #16191d;")
-        #     self.LblBottomPanel.setStyleSheet("color: #16191d;")
-        #     self.LblStatusBar.setStyleSheet("color: #2c313c;")
-        #     self.LblTopPanel.setStyleSheet("color: #2c313c;")
-        #     self.BtnSearch.setStyleSheet("color: #16191d;")
-        #     self.BtnHide.setStyleSheet("color: #16191d;")
-        #     self.BtnInfo.setStyleSheet("color: #16191d;")
-        #     self.BtnHelp.setStyleSheet("color: #16191d;")
-        #     self.BtnAddCnt.setStyleSheet("color: #2c313c;")
-        #     self.BtnMinusCnt.setStyleSheet("color: #2c313c;")
-        #     qtApp.saveBattery=False
+
 if __name__ == '__main__':
     app=QApplication(sys.argv)    
     ex=qtApp()
