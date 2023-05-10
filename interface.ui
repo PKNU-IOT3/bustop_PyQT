@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1054</width>
-    <height>704</height>
+    <width>1124</width>
+    <height>729</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -558,7 +558,7 @@
                 <string/>
                </property>
                <property name="pixmap">
-                <pixmap resource="resources.qrc">:/images/bustopimage.png</pixmap>
+                <pixmap>:/images/bustopimage.png</pixmap>
                </property>
                <property name="scaledContents">
                 <bool>true</bool>
@@ -732,9 +732,9 @@
                   <colorrole role="PlaceholderText">
                    <brush brushstyle="NoBrush">
                     <color alpha="128">
-                     <red>0</red>
-                     <green>0</green>
-                     <blue>0</blue>
+                     <red>255</red>
+                     <green>255</green>
+                     <blue>255</blue>
                     </color>
                    </brush>
                   </colorrole>
@@ -898,9 +898,9 @@
                   <colorrole role="PlaceholderText">
                    <brush brushstyle="NoBrush">
                     <color alpha="128">
-                     <red>0</red>
-                     <green>0</green>
-                     <blue>0</blue>
+                     <red>255</red>
+                     <green>255</green>
+                     <blue>255</blue>
                     </color>
                    </brush>
                   </colorrole>
