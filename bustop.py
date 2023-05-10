@@ -10,29 +10,25 @@ import pymysql
 import resources_rc
 
 class qtApp(QMainWindow):
-    # 행 선택 확인 bool 변수
-    isClicked=False
-    saveBattery=False
+    isClicked=False # 행 선택 확인 bool 변수
+    saveBattery=False # 좌측 상단 Device ON/OFF 상태 변수
+    timer=QTimer() # DB 내용 변경 시 실시간 반영을 위해 사용할 timer
     def __init__(self):
         super().__init__()
-        uic.loadUi('interface.ui',self)
+        uic.loadUi('interface.ui',self) # ui 로드
         self.setWindowIcon(QIcon('images/bustopimage.png'))
         self.setWindowTitle('BuSTOP v2')
-        self.initUI()
-        self.InitSignal()
-        self.BtnHideClicked()
+        self.initUI() #initUI 메소드 호출하여 실행 직후의 statusBar 출력 및 DB 연결
+        self.InitSignal() #버튼 시그널 연결 <- 해당 소스 분리 하지 않고 버튼 시그널을 __init__ 내부에 작성 시 시그널이 중복 호출되어 연결된 슬롯 함수가 2번씩 실행
+        self.BtnHideClicked() # 사용자가 정보 출력 버튼 누를 때 까지 버스 정보 화면을 숨겨놓기 위함
 
-
-        self.timer = QTimer(self)
-        self.timer.start(1)
-        self.timer.timeout.connect(self.initUI)
-
-
+        ## 초기 LblInfor Font 설정
         font=QFont('Rockwell',12)
         font.setBold(True)
         self.LblInfor.setFont(font)
         self.LblInfor.setStyleSheet("color: DarkSeaGreen;")
     
+    # 상태바에 시간 출력 및 db 연결, QTableWidget인 BusInfor에 DB 정보 연결
     def initUI(self):
         self.date = QDate.currentDate()
         self.datetime = QDateTime.currentDateTime()
@@ -59,6 +55,7 @@ class qtApp(QMainWindow):
             for column,item in enumerate(data):
                 # 데이터를 QTableWidgetItem으로 변환하여 테이블 위젯에 추가
                 cell=QTableWidgetItem(str(item))
+                # 가독성을 위해 ~ 번 / ~ 명 / ~ 분의 형태로 정보를 출력하기 위함
                 if column==1:
                     cell.setText(str(item)+"번")
                     cell.setFont(QFont('Rockwell',14))
@@ -87,9 +84,9 @@ class qtApp(QMainWindow):
     
     # 셀 클릭 위치 확인 
     def CellPosition(self):
-        qtApp.isClicked=True
+        qtApp.isClicked=True # 셀이 클릭 된경우 선언해둔 bool형 변수 isClicked를 True로 변경
         row=self.BusInfor.currentRow()
-        mybus_num=self.BusInfor.item(row,1).text()
+        mybus_num=self.BusInfor.item(row,1).text() # ex) 100-1
         self.LblNotification.setText(f'{mybus_num} 버스 선택')
         self.LblNotification.setFont(QFont('Rockwell',14))
         self.LblNotification.setStyleSheet("color: green;")
@@ -97,7 +94,7 @@ class qtApp(QMainWindow):
     # 탑승 대기 버튼 클릭
     def BtnAddCntClicked(self):
         #if self.BusInfor.currentRow()<0:
-        if(qtApp.isClicked==False):
+        if(qtApp.isClicked==False): # CellPosition 함수가 호출되지 않은 경우 즉 셀 선택이 안된 경우
             self.LblNotification.setText("버튼 사용은 버스 선택 이후 가능합니다!")
             font=QFont('Rockwell',14)
             font.setBold(True)
@@ -108,7 +105,7 @@ class qtApp(QMainWindow):
             row=self.BusInfor.currentRow()
             mybus_num=self.BusInfor.item(row,1).text()
             mybus_cnt=self.BusInfor.item(row,2)
-            if(mybus_cnt.text()=='50명'):
+            if(mybus_cnt.text()=='50명'): # 버스 최대 탑승 인원 50명으로 제한
                 self.LblNotification.setText("탑승 대기 인원 초과이기에 대기 불가능합니다.")
                 font=QFont('Rockwell',14)
                 font.setBold(True)
@@ -124,7 +121,7 @@ class qtApp(QMainWindow):
                 )
             try:
                 cursor=self.mydb.cursor()
-                cursor.execute(f"UPDATE bus_table SET bus_cnt = bus_cnt+1 WHERE bus_num = '{mybus_num.replace('번', '')}'")
+                cursor.execute(f"UPDATE bus_table SET bus_cnt = bus_cnt+1 WHERE bus_num = '{mybus_num.replace('번', '')}'") # 탑승 대기 버튼 클릭 시 DB의 bus_cnt 를 1 증가
                 self.mydb.commit()
                 self.updateTable(row)
                 self.LblNotification.setText(f"{mybus_num} 버스 탑승 대기 완료!")
@@ -132,7 +129,7 @@ class qtApp(QMainWindow):
                 font.setBold(True)
                 self.LblNotification.setFont(font)
                 self.LblNotification.setStyleSheet("color: green;")
-                qtApp.isClicked=False
+                qtApp.isClicked=False # 선택된 버스 탑승 대기 / 탑승 취소 후 셀 선택 해제를 의미함
                 self.BusInfor.clearSelection() # 선택된 셀 해제
                 return
             except mysql.connector.Error as error:
@@ -142,7 +139,7 @@ class qtApp(QMainWindow):
 
     # 탑승 취소 버튼 클릭
     def BtnMinusCntClicked(self):
-        if qtApp.isClicked==False:            
+        if qtApp.isClicked==False:  # CellPosition 함수가 호출되지 않은 경우 즉 셀 선택이 안된 경우          
             self.LblNotification.setText("버튼 사용은 버스 선택 이후 가능합니다!")
             font=QFont('Rockwell',14)
             font.setBold(True)
@@ -178,8 +175,8 @@ class qtApp(QMainWindow):
                     font.setBold(True)
                     self.LblNotification.setFont(font)
                     self.LblNotification.setStyleSheet("color: green;")
-                    qtApp.isClicked=False
-                    self.BusInfor.clearSelection()
+                    qtApp.isClicked=False # 선택된 버스 탑승 대기 / 탑승 취소 후 셀 선택 해제를 의미함
+                    self.BusInfor.clearSelection() # 선택된 셀 해제
                     return
                 except mysql.connector.Error as error:
                     print("MySQL 서버 접속 에러 : {}".format(error))
@@ -203,6 +200,7 @@ class qtApp(QMainWindow):
             #셀에 데이터를 추가
             for i,value in enumerate(result):
                 cell = QTableWidgetItem(str(value))
+                # 사용자의 가독성을 위함
                 if i==1:
                     cell.setText(str(value)+"번")
                     cell.setFont(QFont('Rockwell',14))
@@ -221,14 +219,20 @@ class qtApp(QMainWindow):
             mydb.close()
 
     ### 좌측 버튼 함수 / 우측 최소,최대화 ###
+    # 정보 출력 버튼 클릭 시 해당 함수 실행
     def BtnSearchClicked(self):
         self.initUI()
         self.LblInfor.setText('우측 패널에\n 버스 정보가\n 출력 되었습니다!')
+        self.timer.timeout.connect(self.initUI) #self.timer.timeout 즉 timer 객체가 종료되면 initUI와 연결시킴 
+        self.timer.start(1)#정보 출력 시 계속해서 timer가 돌아야하기 때문에 timer.start(1)
 
+    # 정보 숨기기 버튼 클릭 시 해당 함수 실행
     def BtnHideClicked(self):
-        self.BusInfor.setRowCount(0)
+        self.BusInfor.setRowCount(0) # BusInfor을 비움
         self.LblInfor.setText('버스 도착 정보를\n 확인하시려면 \n좌측 정보 출력 버튼을 \n클릭해주세요!')
+        self.timer.stop() #timer 중지 -> 정보 출력 버튼 클릭 시 timer 다시 돌아가도록 구성
 
+    # LblInfor 라벨에 프로그램 설명을 출력해주는 함수
     def BtnInfoClicked(self):
         self.LblInfor.setText("<BuSTOP!>은\n실시간으로\n 버스 정보를\n제공함으로써\n 승객들은 탑승 예약을\n"+
                             "버스 기사님들은\n 승객이 탑승하는\n정류장에만 정차해\n"+
@@ -243,14 +247,16 @@ class qtApp(QMainWindow):
         self.LblInfor.setFont(font)
         self.LblInfor.setStyleSheet("color: DarkSeaGreen;")
 
+    # 도움말 버튼
     def BtnHelpClicked(self):
         self.LblInfor.setText('관리자\n전화번호\n\n010-8515-0728')
         
-
+    # 우측 하단 (x) 버튼
     def BtnClearNoteClicked(self):
         self.LblNotification.setText("")
         self.LblInfor.setText("")
 
+    # 장치 ON/OFF
     def BtnDeviceOnOffClicked(self):
         if qtApp.saveBattery: # 장치가 켜진 상태일때
             self.LblLeftPanel.setStyleSheet("color: white;")
@@ -267,6 +273,7 @@ class qtApp(QMainWindow):
             header_style="QHeaderView::section {background-color: %s; text-align: center;}" %QColor(0,0,0).name()
             self.BusInfor.horizontalHeader().setStyleSheet(header_style)
             qtApp.saveBattery = False
+            self.timer.start(1) # 장치가 켜지면서 timer 실행
         else: # 장치가 꺼진 상태일 때
             self.BusInfor.setRowCount(0)
             self.LblNotification.setText("")
@@ -285,6 +292,7 @@ class qtApp(QMainWindow):
             header_style="QHeaderView::section {background-color: %s; text-align: center;}" %QColor(255,255,255).name()
             self.BusInfor.horizontalHeader().setStyleSheet(header_style)
             qtApp.saveBattery = True
+            self.timer.stop() # 장치가 꺼지면 timer 중지
     
 if __name__ == '__main__':
     app=QApplication(sys.argv)    

@@ -1,0 +1,13 @@
+begin - 초기화면
+clearnote - 노트 초기화
+deviceoff - 저전력모드
+deviceon - 저전력모드 해제
+help - 관리자
+hide - 정보숨기기
+info - 정보
+minus - 탑승대기취소
+over - 50명 이상
+plus - 탑승대기
+print - 출력
+select - 선택
+zero - 0명 이하
