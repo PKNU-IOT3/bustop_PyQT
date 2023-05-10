@@ -16,13 +16,29 @@ class qtApp(QMainWindow):
     def __init__(self):
         super().__init__()
         uic.loadUi('interface.ui',self)
-        self.setWindowIcon(QIcon('bustopimage.png'))
+        self.setWindowIcon(QIcon('images/bustopimage.png'))
         self.setWindowTitle('BuSTOP v2')
-        self.UI초기화()
+        self.initUI()
         self.InitSignal()
         self.BtnHideClicked()
+
+
+        self.timer = QTimer(self)
+        self.timer.start(1)
+        self.timer.timeout.connect(self.initUI)
+
+
+        font=QFont('Rockwell',12)
+        font.setBold(True)
+        self.LblInfor.setFont(font)
+        self.LblInfor.setStyleSheet("color: DarkSeaGreen;")
     
-    def UI초기화(self):
+    def initUI(self):
+        self.date = QDate.currentDate()
+        self.datetime = QDateTime.currentDateTime()
+
+        self.statusBar().showMessage(self.datetime.toString(Qt.DefaultLocaleLongDate))
+
         mydb = mysql.connector.connect(
             host="localhost",
             user="root",
@@ -38,8 +54,6 @@ class qtApp(QMainWindow):
         self.BusInfor.horizontalHeader().setStyleSheet(header_style)
         item_style="QTableWidget::item {text-align: center;}"
         self.BusInfor.setStyleSheet(item_style)
-        #self.BusInfor.header = ['버스 등록 번호', '버스 번호', '탑승 대기 인원', '배차 간격']
-
 
         for row,data in enumerate(myresult):
             for column,item in enumerate(data):
@@ -51,10 +65,14 @@ class qtApp(QMainWindow):
                 if column==2:
                     cell.setText(str(item)+"명")
                     cell.setFont(QFont('Rockwell',14))
+                if column==3:
+                    cell.setText(str(item)+"분")
+                    cell.setFont(QFont('Rockwell',14))
                 self.BusInfor.setItem(row,column,cell)
                 cell.setTextAlignment(QtCore.Qt.AlignCenter)
                 cell.setFont(QFont('Rockwell',14))
     
+    # 버튼 시그널을 따로 함수로 구현하지 않고 UI 초기화에 넣으면 버튼에 연결된 슬롯함수가 두번씩 호출
     def InitSignal(self):
         # 버튼 시그널
         self.BtnAddCnt.clicked.connect(self.BtnAddCntClicked)
@@ -89,6 +107,15 @@ class qtApp(QMainWindow):
         else:
             row=self.BusInfor.currentRow()
             mybus_num=self.BusInfor.item(row,1).text()
+            mybus_cnt=self.BusInfor.item(row,2)
+            if(mybus_cnt.text()=='50명'):
+                self.LblNotification.setText("탑승 대기 인원 초과이기에 대기 불가능합니다.")
+                font=QFont('Rockwell',14)
+                font.setBold(True)
+                self.LblNotification.setFont(font)
+                self.LblNotification.setStyleSheet("color: orange;")
+                return
+
             self.mydb=mysql.connector.connect(
                 host="localhost",
                 user="root",
@@ -106,6 +133,7 @@ class qtApp(QMainWindow):
                 self.LblNotification.setFont(font)
                 self.LblNotification.setStyleSheet("color: green;")
                 qtApp.isClicked=False
+                self.BusInfor.clearSelection() # 선택된 셀 해제
                 return
             except mysql.connector.Error as error:
                 print("MySQL 서버 접속 에러 : {}".format(error))
@@ -114,7 +142,6 @@ class qtApp(QMainWindow):
 
     # 탑승 취소 버튼 클릭
     def BtnMinusCntClicked(self):
-        #if self.BusInfor.currentRow()<0:
         if qtApp.isClicked==False:            
             self.LblNotification.setText("버튼 사용은 버스 선택 이후 가능합니다!")
             font=QFont('Rockwell',14)
@@ -132,6 +159,7 @@ class qtApp(QMainWindow):
                 font.setBold(True)
                 self.LblNotification.setFont(font)
                 self.LblNotification.setStyleSheet("color: orange;")
+                self.BusInfor.clearSelection()
                 return
             else:
                 self.mydb=mysql.connector.connect(
@@ -151,6 +179,7 @@ class qtApp(QMainWindow):
                     self.LblNotification.setFont(font)
                     self.LblNotification.setStyleSheet("color: green;")
                     qtApp.isClicked=False
+                    self.BusInfor.clearSelection()
                     return
                 except mysql.connector.Error as error:
                     print("MySQL 서버 접속 에러 : {}".format(error))
@@ -174,15 +203,26 @@ class qtApp(QMainWindow):
             #셀에 데이터를 추가
             for i,value in enumerate(result):
                 cell = QTableWidgetItem(str(value))
+                if i==1:
+                    cell.setText(str(value)+"번")
+                    cell.setFont(QFont('Rockwell',14))
+                if i==2:
+                    cell.setText(str(value)+"명")
+                    cell.setFont(QFont('Rockwell',14))
+                if i==3:
+                    cell.setText(str(value)+"분")
+                    cell.setFont(QFont('Rockwell',14))
                 self.BusInfor.setItem(row,i,cell)
+                cell.setTextAlignment(QtCore.Qt.AlignCenter)
+                cell.setFont(QFont('Rockwell',14))
         except mysql.connector.Error as error:
             print("MySQL 서버 접속 에러 : {}".format(error))
         finally:
             mydb.close()
 
-    ### 좌측 버튼 함수 ###
+    ### 좌측 버튼 함수 / 우측 최소,최대화 ###
     def BtnSearchClicked(self):
-        self.UI초기화()
+        self.initUI()
         self.LblInfor.setText('우측 패널에\n 버스 정보가\n 출력 되었습니다!')
 
     def BtnHideClicked(self):
@@ -198,12 +238,18 @@ class qtApp(QMainWindow):
                             "<BuSTOP!> 시스템은\n누구나 쉽게\n간단한 UI 조작을 통해\n탑승 정보를\n"+
                             "기사님에게 알려\n정류장에서의\n불필요한 정차를 줄여\n보다 효율적인\n대중교통 시스템을\n"+
                             "구축하는데\n도움이 됩니다.")
+        font=QFont('Rockwell',12)
+        font.setBold(True)
+        self.LblInfor.setFont(font)
+        self.LblInfor.setStyleSheet("color: DarkSeaGreen;")
 
     def BtnHelpClicked(self):
-        self.LblInfor.setText('관리자\n전화번호\n010-8515-0728\n번으로 연락\n부탁드립니다!')
+        self.LblInfor.setText('관리자\n전화번호\n\n010-8515-0728')
+        
 
     def BtnClearNoteClicked(self):
         self.LblNotification.setText("")
+        self.LblInfor.setText("")
 
     def BtnDeviceOnOffClicked(self):
         if qtApp.saveBattery: # 장치가 켜진 상태일때
@@ -239,7 +285,7 @@ class qtApp(QMainWindow):
             header_style="QHeaderView::section {background-color: %s; text-align: center;}" %QColor(255,255,255).name()
             self.BusInfor.horizontalHeader().setStyleSheet(header_style)
             qtApp.saveBattery = True
-
+    
 if __name__ == '__main__':
     app=QApplication(sys.argv)    
     ex=qtApp()

@@ -10,7 +10,7 @@ class qtApp(QMainWindow):
     conn = None
     def __init__(self):
         super().__init__()
-        uic.loadUi('busstop_0317.ui', self)
+        uic.loadUi('TestingFiles/busstop_0317.ui', self)
         self.setWindowIcon(QIcon('bustopimage.png'))
         self.setWindowTitle('BusStop v0.1')
         
