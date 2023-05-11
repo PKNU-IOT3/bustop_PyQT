@@ -292,6 +292,7 @@ class qtApp(QMainWindow):
             header_style="QHeaderView::section {background-color: %s; text-align: center;}" %QColor(255,255,255).name()
             self.BusInfor.horizontalHeader().setStyleSheet(header_style)
             qtApp.saveBattery = True
+            qtApp.isClicked==False
             self.timer.stop() # 장치가 꺼지면 timer 중지
     
 if __name__ == '__main__':
