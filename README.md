@@ -127,3 +127,14 @@
 
 # App 실행 화면
 ![](https://raw.githubusercontent.com/PKNU-IOT3/bustop_PyQT/main/images/BuSTOP.gif)
+
+## 05_11 소스코드 수정
+#### 1) 현재 탑승 인원 추가, 탑승 대기인원 + 탑승 추가인원을 기준으로 최대 탑승인원을 계산
+- 탑승 대기인원 + 탑승 추가인원 >=50 인 경우 탑승 대기를 더이상 하지 못하도록 탑승 대기 버튼 비활성화
+![](https://raw.githubusercontent.com/PKNU-IOT3/bustop_PyQT/main/images/Over50.png)
+- 탑승 대기인원 = 0 인 경우 탑승 취소를 못하도록 탑승 취소 버튼 비활성화
+![](https://raw.githubusercontent.com/PKNU-IOT3/bustop_PyQT/main/images/Cnt_zero.png)
+#### 2) 1)번 문제 icon 비활성화를 위해 커스텀 클래스인 IconButton 생성
+![](https://raw.githubusercontent.com/PKNU-IOT3/bustop_PyQT/main/images/0511_iconVisible.png)
+#### 3) Device ON/OFF 시 icon 활성화 / 비활성화
+![](https://raw.githubusercontent.com/PKNU-IOT3/bustop_PyQT/main/images/Device_off.png)
