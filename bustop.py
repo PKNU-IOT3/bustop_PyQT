@@ -273,7 +273,7 @@ class qtApp(QMainWindow):
             header_style="QHeaderView::section {background-color: %s; text-align: center;}" %QColor(0,0,0).name()
             self.BusInfor.horizontalHeader().setStyleSheet(header_style)
             qtApp.saveBattery = False
-            self.timer.start(1) # 장치가 켜지면서 timer 실행
+            #self.timer.start(1) # 장치가 켜지면서 timer 실행
         else: # 장치가 꺼진 상태일 때
             self.BusInfor.setRowCount(0)
             self.LblNotification.setText("")
