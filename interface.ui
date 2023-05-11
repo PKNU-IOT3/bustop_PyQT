@@ -946,7 +946,7 @@
                 <number>0</number>
                </property>
                <property name="columnCount">
-                <number>4</number>
+                <number>5</number>
                </property>
                <attribute name="verticalHeaderVisible">
                 <bool>false</bool>
@@ -1050,6 +1050,22 @@
                    <blue>0</blue>
                   </color>
                  </brush>
+                </property>
+               </column>
+               <column>
+                <property name="text">
+                 <string>현재 탑승 인원</string>
+                </property>
+                <property name="font">
+                 <font>
+                  <family>나눔고딕</family>
+                  <pointsize>10</pointsize>
+                  <weight>75</weight>
+                  <bold>true</bold>
+                 </font>
+                </property>
+                <property name="textAlignment">
+                 <set>AlignCenter</set>
                 </property>
                </column>
               </widget>

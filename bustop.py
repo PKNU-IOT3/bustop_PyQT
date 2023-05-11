@@ -8,6 +8,21 @@ from PyQt5.QtCore import *
 import mysql.connector
 import pymysql
 import resources_rc
+from PyQt5.QtWidgets import QPushButton
+from PyQt5.QtGui import QIcon
+class IconButton(QPushButton):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self._icon_visible = True
+
+    def setIconVisible(self, visible):
+        self._icon_visible = visible
+        self.update()
+
+    def paintEvent(self, event):
+        super().paintEvent(event)
+        if not self._icon_visible:
+            self.setIcon(QtGui.QIcon())
 
 class qtApp(QMainWindow):
     isClicked=False # 행 선택 확인 bool 변수
@@ -65,6 +80,9 @@ class qtApp(QMainWindow):
                 if column==3:
                     cell.setText(str(item)+"분")
                     cell.setFont(QFont('Rockwell',14))
+                if column==4:
+                    cell.setText(str(item)+"명")
+                    cell.setFont(QFont('Rockwell',14))
                 self.BusInfor.setItem(row,column,cell)
                 cell.setTextAlignment(QtCore.Qt.AlignCenter)
                 cell.setFont(QFont('Rockwell',14))
@@ -87,9 +105,31 @@ class qtApp(QMainWindow):
         qtApp.isClicked=True # 셀이 클릭 된경우 선언해둔 bool형 변수 isClicked를 True로 변경
         row=self.BusInfor.currentRow()
         mybus_num=self.BusInfor.item(row,1).text() # ex) 100-1
+        mybus_cnt=self.BusInfor.item(row,2).text()
+        mybus_cnt_1=self.BusInfor.item(row,2).text().replace('명','')
+        mybus_nowin=self.BusInfor.item(row,4).text().replace('명','')
+        mybus_total=int(mybus_cnt_1)+int(mybus_nowin)
+
         self.LblNotification.setText(f'{mybus_num} 버스 선택')
         self.LblNotification.setFont(QFont('Rockwell',14))
         self.LblNotification.setStyleSheet("color: green;")
+        if(mybus_cnt=='0명'):
+            self.BtnMinusCnt.setEnabled(False)
+            self.BtnMinusCnt.setStyleSheet("color : #2c313c;")
+            self.BtnMinusCnt.setVisible(False)
+        else:
+            self.BtnMinusCnt.setEnabled(True)
+            self.BtnMinusCnt.setStyleSheet("color : white;")
+            self.BtnMinusCnt.setVisible(True)
+
+        if(mybus_total>=50):
+            self.BtnAddCnt.setEnabled(False)
+            self.BtnAddCnt.setStyleSheet("color : #2c313c;")
+            self.BtnAddCnt.setVisible(False)
+        else:
+            self.BtnAddCnt.setEnabled(True)
+            self.BtnAddCnt.setStyleSheet("color : white;")
+            self.BtnAddCnt.setVisible(True)
 
     # 탑승 대기 버튼 클릭
     def BtnAddCntClicked(self):
@@ -104,8 +144,11 @@ class qtApp(QMainWindow):
         else:
             row=self.BusInfor.currentRow()
             mybus_num=self.BusInfor.item(row,1).text()
-            mybus_cnt=self.BusInfor.item(row,2)
-            if(mybus_cnt.text()=='50명'): # 버스 최대 탑승 인원 50명으로 제한
+            mybus_cnt=self.BusInfor.item(row,2).text().replace('명','')
+            mybus_nowin=self.BusInfor.item(row,4).text().replace('명','')
+            
+            mybus_total=int(mybus_cnt)+int(mybus_nowin)
+            if(mybus_total>=50): # 버스 최대 탑승 인원 50명으로 제한
                 self.LblNotification.setText("탑승 대기 인원 초과이기에 대기 불가능합니다.")
                 font=QFont('Rockwell',14)
                 font.setBold(True)
@@ -265,11 +308,18 @@ class qtApp(QMainWindow):
             self.LblStatusBar.setStyleSheet("color: white;")
             self.LblTopPanel.setStyleSheet("color: white;")
             self.BtnSearch.setStyleSheet("color: white;")
+            self.BtnSearch.setVisible(True)
             self.BtnHide.setStyleSheet("color: white;")
+            self.BtnHide.setVisible(True)
             self.BtnInfo.setStyleSheet("color: white;")
+            self.BtnInfo.setVisible(True)
             self.BtnHelp.setStyleSheet("color: white;")
+            self.BtnHelp.setVisible(True)
             self.BtnAddCnt.setStyleSheet("color: white;")
+            self.BtnAddCnt.setVisible(True)
             self.BtnMinusCnt.setStyleSheet("color: white;")
+            self.BtnMinusCnt.setVisible(True)
+            self.BtnClearNote.setVisible(True)
             header_style="QHeaderView::section {background-color: %s; text-align: center;}" %QColor(0,0,0).name()
             self.BusInfor.horizontalHeader().setStyleSheet(header_style)
             qtApp.saveBattery = False
@@ -284,11 +334,18 @@ class qtApp(QMainWindow):
             self.LblStatusBar.setStyleSheet("color: #2c313c;")
             self.LblTopPanel.setStyleSheet("color: #2c313c;")
             self.BtnSearch.setStyleSheet("color: #16191d;")
+            self.BtnSearch.setVisible(False)
             self.BtnHide.setStyleSheet("color: #16191d;")
+            self.BtnHide.setVisible(False)
             self.BtnInfo.setStyleSheet("color: #16191d;")
+            self.BtnInfo.setVisible(False)
             self.BtnHelp.setStyleSheet("color: #16191d;")
+            self.BtnHelp.setVisible(False)
             self.BtnAddCnt.setStyleSheet("color: #2c313c;")
+            self.BtnAddCnt.setVisible(False)
             self.BtnMinusCnt.setStyleSheet("color: #2c313c;")
+            self.BtnMinusCnt.setVisible(False)
+            self.BtnClearNote.setVisible(False)
             header_style="QHeaderView::section {background-color: %s; text-align: center;}" %QColor(255,255,255).name()
             self.BusInfor.horizontalHeader().setStyleSheet(header_style)
             qtApp.saveBattery = True
