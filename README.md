@@ -61,3 +61,69 @@
 # PyQt를 활용한 버스 탑승 App - UI 및 로직 대규모 수정
 ### 23.05.11 수정
 ## Qt Designer을 활용한 UI 변경
+- #### interfaceUI_Design
+![](https://raw.githubusercontent.com/PKNU-IOT3/bustop_pyqt_practice/main/images/interfaceUI_Design.png)
+- #### interfaceUI_Element
+![](https://raw.githubusercontent.com/PKNU-IOT3/bustop_pyqt_practice/main/images/interfaceUI_element.png)
+## MySQL DataBase 구성 변경
+![](https://raw.githubusercontent.com/PKNU-IOT3/bustop_pyqt_practice/main/images/MySQL_modify.png)
+## App 작동 화면
+- ### 프로그램 시작화면(Main 화면)
+![](https://raw.githubusercontent.com/PKNU-IOT3/bustop_pyqt_practice/main/images/begin.png)
+- ### 정보 출력(DB에 등록되어 있는 Bus 정보를 출력)
+![](https://raw.githubusercontent.com/PKNU-IOT3/bustop_pyqt_practice/main/images/print.png)
+- ### 정보 숨기기(QTableWidget에 출력한 버스 정보 Hide)
+![](https://raw.githubusercontent.com/PKNU-IOT3/bustop_pyqt_practice/main/images/hide.png)
+- ### BuSTOP이란? (프로그램에 대한 정보 제공)
+![](https://raw.githubusercontent.com/PKNU-IOT3/bustop_pyqt_practice/main/images/info.png)
+- ### 도움말(괸리자와 연결)
+![](https://raw.githubusercontent.com/PKNU-IOT3/bustop_pyqt_practice/main/images/help.png)
+- ### 탑승 대기 버튼(버튼 이벤트 발생 시 탑승 대기 인원 +1)
+![](https://raw.githubusercontent.com/PKNU-IOT3/bustop_pyqt_practice/main/images/plus.png)
+- ### 탑승 취소 버튼(버튼 이벤트 발생 시 탑승 대기 인원 -1)
+![](https://raw.githubusercontent.com/PKNU-IOT3/bustop_pyqt_practice/main/images/minus.png)
+- ### App 작동 시 발생 오류
+    - ### 버스를 선택하지 않은 경우
+        ![](https://raw.githubusercontent.com/PKNU-IOT3/bustop_pyqt_practice/main/images/NoSelect.png)
+    - ### 탑승 최대 인원 50명인 상태에서 탑승 대기 버튼 클릭하는 경우
+        ![](https://raw.githubusercontent.com/PKNU-IOT3/bustop_pyqt_practice/main/images/over.png)
+    - ### 탑승 인원이 0명인 상태에서 탑승 취소 버튼 클릭하는 경우
+        ![](https://raw.githubusercontent.com/PKNU-IOT3/bustop_pyqt_practice/main/images/zero.png)
+- ### 알림 지우기(우측 하단 X 버튼)
+![](https://raw.githubusercontent.com/PKNU-IOT3/bustop_pyqt_practice/main/images/clearnote.png)
+- ### Device On (좌측 상단 Device on/off 버튼)
+![](https://raw.githubusercontent.com/PKNU-IOT3/bustop_pyqt_practice/main/images/deviceOn.png)
+- ### Device Off
+![](https://raw.githubusercontent.com/PKNU-IOT3/bustop_pyqt_practice/main/images/deviceOff.png)
+## 프로그램 로직
+- ### 자세한 내용은 소스코드 및 주석 참조
+#### 1) initUI(DB연결 및 정보출력)
+- 상태바에 시간 출력 및 DB 연결, QTableWidget인 BusInfor에 DB의 정보 출력
+#### 2) initSignal(버튼 시그널)
+- 버튼 시그널 및 슬롯함수 연결 구문을 따로 빼주지 않으면 슬롯함수가 2번 호출되는 오류 발생
+#### 3) CellPosition(셀 클릭 위치 확인)
+- 사용자가 QTableWidget에 출력된 정보 중 본인이 탑승할 버스의 선택을 확인함 / Bool 함수를 통해 클릭 유무를 확인
+#### 4) BtnAddCntClicked(탑승 대기)
+- 셀 클릭 이후 탑승 대기 버튼 - 탑승 대기 인원을 1 증가시키고 탑승 대기 완료 메시지 출력 / 최대 인원 : 50명
+#### 5) BtnMinusCntClicked(탑승 취소)
+- 셀 클릭 이후 탑승 취소 버튼 - 탑승 대기 인원을 1 감소시키고 탑승 취소 완료 메시지 출력 / 탑승 인원 0명일때 클릭 시 오류
+#### 6) updateTable(업데이트)
+- DB가 변경되는 작업 수행 이후 최신화된 정보를 출력시키기 위함
+#### 7) BtnSearchClicked(정보 출력 버튼) 
+- 정보 출력 시 initUI를 호출하여 최신 DB 정보 출력
+#### 8) BtnHideClicked(정보 숨기기 버튼)
+- QTableWidget에 출력된 정보를 사용자가 볼 수 없도록 가리기 위함
+#### 9) BtnInfoClicked(Bustop이란?)
+- 프로그램 설명을 위함
+#### 10) BtnHelpClicked(도움말)
+- 관리자와 연결
+#### 11) BtnClearNoteClicked(우측 하단 {x} 버튼)
+- 알림 / 정보 출력 패널 모두 지우기 위함
+#### 12) BtnDeviceOnOffClicked(장치 ON/OFF 버튼)
+- 장치의 전원을 ON/OFF 시키기 위함
+#### cf) QTimer를 사용하여 DB 정보 변경 시 실시간으로 프로그램에 반영
+- BtnSearch 버튼 클릭 시 timer.start
+- BtnHide 버튼 / Device Off 모드 일 때 timer.stop 
+
+# App 실행 화면
+![](https://raw.githubusercontent.com/PKNU-IOT3/bustop_pyqt_practice/main/images/BuSTOP.gif)
