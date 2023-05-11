@@ -76,7 +76,7 @@
 ![](https://raw.githubusercontent.com/PKNU-IOT3/bustop_PyQT/main/images/hide.png)
 - ### BuSTOP이란? (프로그램에 대한 정보 제공)
 ![](https://raw.githubusercontent.com/PKNU-IOT3/bustop_PyQT/main/images/info.png)
-- ### 도움말(괸리자와 연결)
+- ### 도움말(관리자와 연결)
 ![](https://raw.githubusercontent.com/PKNU-IOT3/bustop_PyQT/main/images/help.png)
 - ### 탑승 대기 버튼(버튼 이벤트 발생 시 탑승 대기 인원 +1)
 ![](https://raw.githubusercontent.com/PKNU-IOT3/bustop_PyQT/main/images/plus.png)
