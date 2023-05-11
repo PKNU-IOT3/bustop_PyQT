@@ -61,4 +61,3 @@
 # PyQt를 활용한 버스 탑승 App - UI 및 로직 대규모 수정
 ### 23.05.11 수정
 ## Qt Designer을 활용한 UI 변경
-- <img src="https://raw.githubusercontent.com/PKNU-IOT3/bustop_pyqt_practice/main/images/interfaceUI_Design.png"/>
