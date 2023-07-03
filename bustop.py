@@ -28,6 +28,7 @@ class qtApp(QMainWindow):
     isClicked=False # 행 선택 확인 bool 변수
     saveBattery=False # 좌측 상단 Device ON/OFF 상태 변수
     timer=QTimer() # DB 내용 변경 시 실시간 반영을 위해 사용할 timer
+    isShow=False # 정보 출력 버튼을 누른 상태인지 확인하기 위함
     def __init__(self):
         super().__init__()
         uic.loadUi('interface.ui',self) # ui 로드
@@ -99,6 +100,7 @@ class qtApp(QMainWindow):
         self.BtnHelp.clicked.connect(self.BtnHelpClicked)
         self.BtnClearNote.clicked.connect(self.BtnClearNoteClicked)
         self.BtnDeviceOnOff.clicked.connect(self.BtnDeviceOnOffClicked)
+        self.BtnRefresh.clicked.connect(self.BtnRefreshClicked)
     
     # 셀 클릭 위치 확인 
     def CellPosition(self):
@@ -130,6 +132,20 @@ class qtApp(QMainWindow):
             self.BtnAddCnt.setEnabled(True)
             self.BtnAddCnt.setStyleSheet("color : white;")
             self.BtnAddCnt.setVisible(True)
+
+    #버스 선택 초기화를 위한 버튼 이벤트
+    def BtnRefreshClicked(self):
+        qtApp.isClicked=False
+        self.BusInfor.clearSelection()
+        self.LblNotification.setText("")
+        self.BtnAddCnt.setVisible(False)
+        self.BtnMinusCnt.setVisible(False)
+
+        if qtApp.isShow==True:
+            self.LblInfor.setText('우측 패널에\n 버스 정보가\n 출력 되었습니다!')
+        else:
+            self.LblInfor.setText('선택 초기화 버튼은 \n버스를 선택한 후 \n사용하실 수 있습니다.')
+        
 
     # 탑승 대기 버튼 클릭
     def BtnAddCntClicked(self):
@@ -174,6 +190,8 @@ class qtApp(QMainWindow):
                 self.LblNotification.setStyleSheet("color: green;")
                 qtApp.isClicked=False # 선택된 버스 탑승 대기 / 탑승 취소 후 셀 선택 해제를 의미함
                 self.BusInfor.clearSelection() # 선택된 셀 해제
+                self.BtnAddCnt.setVisible(False) # 탑승 대기 버튼 비활성화
+                self.BtnMinusCnt.setVisible(False) # 탑승 취소 버튼 비활성화
                 return
             except mysql.connector.Error as error:
                 print("MySQL 서버 접속 에러 : {}".format(error))
@@ -220,6 +238,8 @@ class qtApp(QMainWindow):
                     self.LblNotification.setStyleSheet("color: green;")
                     qtApp.isClicked=False # 선택된 버스 탑승 대기 / 탑승 취소 후 셀 선택 해제를 의미함
                     self.BusInfor.clearSelection() # 선택된 셀 해제
+                    self.BtnAddCnt.setVisible(False) # 탑승 대기 버튼 비활성화
+                    self.BtnMinusCnt.setVisible(False) # 탑승 취소 버튼 비활성화
                     return
                 except mysql.connector.Error as error:
                     print("MySQL 서버 접속 에러 : {}".format(error))
@@ -264,6 +284,7 @@ class qtApp(QMainWindow):
     ### 좌측 버튼 함수 / 우측 최소,최대화 ###
     # 정보 출력 버튼 클릭 시 해당 함수 실행
     def BtnSearchClicked(self):
+        qtApp.isShow=True
         self.initUI()
         self.LblInfor.setText('우측 패널에\n 버스 정보가\n 출력 되었습니다!')
         self.timer.timeout.connect(self.initUI) #self.timer.timeout 즉 timer 객체가 종료되면 initUI와 연결시킴 
@@ -271,6 +292,7 @@ class qtApp(QMainWindow):
 
     # 정보 숨기기 버튼 클릭 시 해당 함수 실행
     def BtnHideClicked(self):
+        qtApp.isShow=False
         self.BusInfor.setRowCount(0) # BusInfor을 비움
         self.LblInfor.setText('버스 도착 정보를\n 확인하시려면 \n좌측 정보 출력 버튼을 \n클릭해주세요!')
         self.timer.stop() #timer 중지 -> 정보 출력 버튼 클릭 시 timer 다시 돌아가도록 구성
@@ -320,6 +342,7 @@ class qtApp(QMainWindow):
             self.BtnMinusCnt.setStyleSheet("color: white;")
             self.BtnMinusCnt.setVisible(True)
             self.BtnClearNote.setVisible(True)
+            self.BtnRefresh.setVisible(True)
             header_style="QHeaderView::section {background-color: %s; text-align: center;}" %QColor(0,0,0).name()
             self.BusInfor.horizontalHeader().setStyleSheet(header_style)
             qtApp.saveBattery = False
@@ -346,10 +369,12 @@ class qtApp(QMainWindow):
             self.BtnMinusCnt.setStyleSheet("color: #2c313c;")
             self.BtnMinusCnt.setVisible(False)
             self.BtnClearNote.setVisible(False)
+            self.BtnRefresh.setVisible(False)
             header_style="QHeaderView::section {background-color: %s; text-align: center;}" %QColor(255,255,255).name()
             self.BusInfor.horizontalHeader().setStyleSheet(header_style)
             qtApp.saveBattery = True
-            qtApp.isClicked==False
+            qtApp.isClicked=False
+            qtApp.isShow=False
             self.timer.stop() # 장치가 꺼지면 timer 중지
     
 if __name__ == '__main__':
