@@ -121,6 +121,8 @@
 - 알림 / 정보 출력 패널 모두 지우기 위함
 #### 12) BtnDeviceOnOffClicked(장치 ON/OFF 버튼)
 - 장치의 전원을 ON/OFF 시키기 위함
+#### 13) BtnRefreshClicked(선택 초기화 버튼)
+- 버스 선택 후 선택 초기화를 위한 버튼 이벤트
 #### cf) QTimer를 사용하여 DB 정보 변경 시 실시간으로 프로그램에 반영
 - BtnSearch 버튼 클릭 시 timer.start
 - BtnHide 버튼 / Device Off 모드 일 때 timer.stop 
@@ -138,3 +140,13 @@
 ![](https://raw.githubusercontent.com/PKNU-IOT3/bustop_PyQT/main/images/0511_iconVisible.png)
 #### 3) Device ON/OFF 시 icon 활성화 / 비활성화
 ![](https://raw.githubusercontent.com/PKNU-IOT3/bustop_PyQT/main/images/Device_off.png)
+
+## 07_03 소스코드 수정
+#### 1) 선택 초기화 버튼 추가
+- #### Cell 선택 이후 해당 Cell 선택 시 Cell 선택 해제를 위함
+![](https://raw.githubusercontent.com/PKNU-IOT3/bustop_PyQT/main/images/0703_mainpage.png)
+#### 2) 탑승 대기 / 탑승 취소 버튼 이벤트 수정 (사용자 편의성을 위함)
+- #### 탑승 대기 / 탑승 취소 버튼을 사용하여 UPDATE 이후 버튼 비활성화
+
+# App 실행화면
+![](https://raw.githubusercontent.com/PKNU-IOT3/bustop_PyQT/main/images/0703.gif)
