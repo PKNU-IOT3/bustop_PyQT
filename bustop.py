@@ -141,7 +141,7 @@ class qtApp(QMainWindow):
         self.BtnAddCnt.setVisible(False)
         self.BtnMinusCnt.setVisible(False)
 
-        if qtApp.isShow==True:
+        if qtApp.isShow==True: 
             self.LblInfor.setText('우측 패널에\n 버스 정보가\n 출력 되었습니다!')
         else:
             self.LblInfor.setText('선택 초기화 버튼은 \n버스를 선택한 후 \n사용하실 수 있습니다.')
